@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>코로나 지역현황</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+
+    <!-- <style>
+        #chartBox {
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 650px;
+        }
+        div > h1 {
+            text-align: center;
+        }
+    </style> -->
+</head>
+<body>
+
+    <!-- <h1>코로나 지역현황</h1>
+    {% for d in data %}"{{d.gubun}}",{% endfor %}
+    <hr>
+    사망자(누적)
+    {% for d in data %}{{d.deathCnt}},{% endfor %}
+    <hr>
+    전일대비 증감 수 - 확진자
+    {% for d in data %}{{d.incDec}},{% endfor %}
+    <hr>
+    격리 해제 수
+    {% for d in data %}{{d.isolClearCnt}},{% endfor %}
+    <hr>
+    10만명당 발생률
+    {% for d in data %}{{d.qurRate|float}},{% endfor %}
+    <hr> -->
+
+    <div id="chartBox">
+        <h1>지역별 사망자 누적수</h1>
+        <canvas id="deathCnt"></canvas>
+
+        <h1>전일대비 증감 수 - 확진자</h1>
+        <canvas id="incDec"></canvas>
+
+        <h1>등등 밑에 해주면 됨</h1>
+    </div>
+    
+
+    <script>
+        // 지역 표현 색깔
+        colorList = [
+                        'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)',
+                        'rgba(200, 99, 132, 0.2)', 'rgba(200, 162, 235, 0.2)', 'rgba(200, 206, 86, 0.2)',
+                        'rgba(160, 99, 132, 0.2)', 'rgba(160, 162, 235, 0.2)', 'rgba(160, 206, 86, 0.2)',
+                        'rgba(130, 99, 132, 0.2)', 'rgba(130, 162, 235, 0.2)', 'rgba(130, 206, 86, 0.2)',
+                        'rgba(60, 99, 132, 0.2)', 'rgba(60, 162, 235, 0.2)', 'rgba(60, 206, 86, 0.2)',
+                        'rgba(0, 99, 132, 0.2)', 'rgba(0, 162, 235, 0.2)', 'rgba(0, 206, 86, 0.2)',
+                    ]
+
+        // 사망자 수(누적수) 그래프
+        var ctx_deathCnt = document.getElementById('deathCnt').getContext('2d');
+
+        const deathCntChart = new Chart(ctx_deathCnt, {
+            type: 'doughnut',
+            data: {
+                labels: [{% for d in data %}"{{d.gubun}}",{% endfor %}],
+                datasets: [{
+                    label: '사망자 누적',
+                    data: [{% for d in data %}"{{d.deathCnt}}",{% endfor %}],
+                    backgroundColor: colorList,            
+                    borderColor: colorList,
+                    borderWidth: 1
+                }]
+            },
+        });
+
+
+        // 사망자 수 그래프
+        var ctx_incDec = document.getElementById('incDec').getContext('2d');
+
+        const incDecChart = new Chart(ctx_incDec, {
+            type: 'doughnut',
+            data: {
+                labels: [{% for d in data %}"{{d.gubun}}",{% endfor %}],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [{% for d in data %}"{{d.incDec}}",{% endfor %}],
+                    backgroundColor: colorList,            
+                    borderColor: colorList,
+                    borderWidth: 1
+                }]
+            },
+        });
+    </script>
+
+    
+</body>
+</html>
